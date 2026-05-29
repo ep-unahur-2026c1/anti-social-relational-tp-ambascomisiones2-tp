@@ -1,0 +1,11 @@
+version: '3.8'
+
+services:
+  # Servicio 1: El motor de Caché (Redis)
+  cache:
+    image: redis:7-alpine
+    container_name: anti_social_network_cache
+    restart: always
+    ports:
+      - "6379:6379"
+

@@ -4,12 +4,38 @@
   "description": "UnaHur anti-social net - Trabajo Práctico",
   "main": "index.js",
   "scripts": {
+    "start": "node src/main.js",
     "dev": "nodemon src/main.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Gerardo Gonzalez Tulian",
   "license": "MIT",
   "devDependencies": {
-    "nodemon": "^3.1.10"
+    "nodemon": "^3.1.14"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/EP-UnaHur-2026C1/anti-social-relational-tp.git"
+  },
+  "keywords": [],
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/EP-UnaHur-2026C1/anti-social-relational-tp/issues"
+  },
+  "homepage": "https://github.com/EP-UnaHur-2026C1/anti-social-relational-tp#readme",
+  "dependencies": {
+    "3": "^2.1.0",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "joi": "^18.2.1",
+    "multer": "^2.1.1",
+    "mysql2": "^3.22.3",
+    "redis": "^5.12.1",
+    "sequelize": "^6.37.8",
+    "sequelize-cli": "^6.6.5",
+    "sqlite": "^5.1.1",
+    "sqlite3": "^6.0.1",
+    "swagger-ui-express": "^5.0.1",
+    "yamljs": "^0.3.0"
   }
 }

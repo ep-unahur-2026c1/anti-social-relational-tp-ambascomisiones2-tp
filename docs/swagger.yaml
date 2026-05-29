@@ -1,0 +1,534 @@
+openapi: 3.0.3
+
+info:
+  title: Anti Social API
+  version: 1.0.0
+  description: UnaHur anti-social net - Trabajo Práctico Grupal de Estrategias de Persistencia.
+
+servers:
+  - url: http://localhost:3000/
+
+tags:
+  - name: Users
+  - name: Posts
+  - name: Comments
+  - name: Tags
+  - name: post_images
+
+paths:
+
+  /users:
+    get:
+      tags:
+        - Users
+      summary: Obtener todos los usuarios
+      responses:
+        '200':
+          description: Lista de usuarios
+
+    post:
+      tags:
+        - Users
+      summary: Crear un usuario
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserInput'
+
+      responses:
+        '201':
+          description: Usuario creado correctamente
+
+  /users/{nickName}:
+    get:
+      tags:
+        - Users
+      summary: Obtener perfil de usuario
+      parameters:
+        - in: path
+          name: nickName
+          required: true
+          schema:
+            type: string
+
+      responses:
+        '200':
+          description: Perfil encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+
+        '404':
+          description: Usuario no encontrado
+
+    put:
+      tags:
+        - Users
+      summary: Actualizar usuario
+      parameters:
+        - in: path
+          name: nickName
+          required: true
+          schema:
+            type: string
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserInput'
+
+      responses:
+        '200':
+          description: Usuario actualizado
+
+    delete:
+      tags:
+        - Users
+      summary: Eliminar usuario y contenido asociado
+      parameters:
+        - in: path
+          name: nickName
+          required: true
+          schema:
+            type: string
+
+      responses:
+        '200':
+          description: Usuario eliminado
+
+  /users/follow:
+    post:
+      tags:
+        - Users
+      summary: Seguir a un usuario
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - followerNick
+                - targetNick
+              properties:
+                followerNick:
+                  type: string
+                  example: luca
+                targetNick:
+                  type: string
+                  example: juan
+
+      responses:
+        '200':
+          description: Seguimiento realizado
+
+  /posts:
+    get:
+      tags:
+        - Posts
+      summary: Obtener todos los posts
+      responses:
+        '200':
+          description: Lista de posts
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PostResponse'
+
+    post:
+      tags:
+        - Posts
+      summary: Crear un post
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostInput'
+
+      responses:
+        '201':
+          description: Post creado
+
+  /posts/{id}:
+    get:
+      tags:
+        - Posts
+      summary: Obtener post por ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+
+      responses:
+        '200':
+          description: Post encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PostResponse'
+
+        '404':
+          description: Post no encontrado
+
+    delete:
+      tags:
+        - Posts
+      summary: Eliminar un post
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+
+      responses:
+        '200':
+          description: Post eliminado
+
+  /posts/{id}/tags:
+    post:
+      tags:
+        - Posts
+      summary: Asociar etiqueta a un post
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - tagId
+              properties:
+                tagId:
+                  type: integer
+                  example: 1
+
+      responses:
+        '201':
+          description: Etiqueta asociada correctamente
+
+  /comments:
+    post:
+      tags:
+        - Comments
+      summary: Crear comentario
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CommentInput'
+
+      responses:
+        '201':
+          description: Comentario creado
+
+  /comments/{id}:
+    delete:
+      tags:
+        - Comments
+      summary: Eliminar comentario
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+
+      responses:
+        '200':
+          description: Comentario eliminado
+
+  /tags:
+    get:
+      tags:
+        - Tags
+      summary: Obtener todas las etiquetas
+      responses:
+        '200':
+          description: Lista de etiquetas
+
+    post:
+      tags:
+        - Tags
+      summary: Crear etiqueta
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TagInput'
+
+      responses:
+        '201':
+          description: Etiqueta creada
+
+  /post_images:
+    post:
+      tags:
+        - post_images
+      summary: Agregar imagen a un post
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostImageInput'
+
+      responses:
+        '201':
+          description: Imagen agregada
+
+  /post_images/{id}:
+    delete:
+      tags:
+        - post_images
+      summary: Eliminar imagen
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+
+      responses:
+        '200':
+          description: Imagen eliminada
+
+components:
+
+  schemas:
+
+    User:
+      type: object
+      required:
+        - nickName
+        - firstName
+        - lastName
+        - birthdate
+        - age
+        - email
+      properties:
+        nickName:
+          type: string
+          example: Juancito123
+        firstName:
+          type: string
+          example: Juan
+        lastName:
+          type: string
+          example: Perez
+        birthdate:
+          type: string
+          format: date
+          example: 2000-05-12
+        age:
+          type: integer
+          example: 25
+        email:
+          type: string
+          format: email
+          example: juancito123@gmail.com
+
+    UserInput:
+      type: object
+      required:
+        - nickName
+        - firstName
+        - lastName
+        - birthdate
+        - email
+      properties:
+        nickName:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        birthdate:
+          type: string
+          format: date
+        email:
+          type: string
+          format: email
+
+    UserProfile:
+      allOf:
+        - $ref: '#/components/schemas/User'
+        - type: object
+          required:
+            - Following
+            - FollowedBy
+          properties:
+            Following:
+              type: array
+              items:
+                $ref: '#/components/schemas/User'
+            FollowedBy:
+              type: array
+              items:
+                $ref: '#/components/schemas/User'
+
+    Post:
+      type: object
+      required:
+        - description
+        - createDate
+        - nickName
+      properties:
+        id:
+          type: integer
+        description:
+          type: string
+          example: Mi primer post
+        createDate:
+          type: string
+          format: date-time
+        nickName:
+          type: string
+          example: Juancito123
+
+    PostInput:
+      type: object
+      required:
+        - description
+        - createDate
+        - nickName
+      properties:
+        description:
+          type: string
+        createDate:
+          type: string
+          format: date-time
+        nickName:
+          type: string
+
+    PostResponse:
+      allOf:
+        - $ref: '#/components/schemas/Post'
+        - type: object
+          required:
+            - user
+            - tags
+            - comments
+          properties:
+            user:
+              $ref: '#/components/schemas/User'
+            images:
+              type: array
+              items:
+                $ref: '#/components/schemas/PostImage'
+            tags:
+              type: array
+              items:
+                $ref: '#/components/schemas/Tag'
+            comments:
+              type: array
+              items:
+                $ref: '#/components/schemas/Comment'
+
+    Comment:
+      type: object
+      required:
+        - text
+        - createDate
+        - visible
+        - nickName
+        - postId
+      properties:
+        id:
+          type: integer
+        text:
+          type: string
+        createDate:
+          type: string
+          format: date-time
+        visible:
+          type: boolean
+        nickName:
+          type: string
+        postId:
+          type: integer
+
+    CommentInput:
+      type: object
+      required:
+        - text
+        - createDate
+        - visible
+        - nickName
+        - postId
+      properties:
+        text:
+          type: string
+        createDate:
+          type: string
+          format: date-time
+        visible:
+          type: boolean
+        nickName:
+          type: string
+        postId:
+          type: integer
+
+    Tag:
+      type: object
+      required:
+        - name
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+          example: tecnologia
+
+    TagInput:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+          example: Juegos
+
+    PostImage:
+      type: object
+      required:
+        - imageUrl
+        - postId
+      properties:
+        id:
+          type: integer
+        imageUrl:
+          type: string
+          example: https://miweb.com/imagen.jpg
+        postId:
+          type: integer
+
+    PostImageInput:
+      type: object
+      required:
+        - imageUrl
+        - postId
+      properties:
+        imageUrl:
+          type: string
+        postId:
+          type: integer
