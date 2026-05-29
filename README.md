@@ -79,3 +79,7 @@ Por otro lado les dejamos la documentación de los endpoint para que también la
 1. Hace el upload de las imágenes que se asocian a un POST que lo guarden en una carpeta de imágenes dentro del servidor web.
 2. ¿Cómo modelarías que un usuario pueda "seguir" a otros usuarios, y a su vez ser seguido por muchos? Followers
 3. Como la información de los post no varía muy seguido ¿Qué estrategias podrían utilizar para que la información no sea constantemente consultada desde la base de datos?
+
+
+
+prueba de commit
