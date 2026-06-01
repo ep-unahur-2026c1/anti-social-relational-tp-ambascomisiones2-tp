@@ -70,6 +70,7 @@ const associateTagToPost = async (req, res) => {
   try {
     const { id } = req.params; 
     const foundPost = req.foundPost;
+    const { tagId } = req.body;
 
     const foundTag = await tag.findByPk(tagId);
     if (!foundTag) {
